@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-MCP (Model Context Protocol) Server for Codex Auth Scanner (tp.py).
+AI Agent Skill Server for Codex Auth Scanner (tp.py).
 This server exposes a tool that allows AI models to directly discover, analyze,
 and optionally delete Codex authentication files.
+Uses the MCP (Model Context Protocol) SDK internally for stdio transport.
 """
 
 import asyncio
@@ -11,7 +12,7 @@ import os
 import sys
 from pathlib import Path
 
-# Important: This uses the official `mcp` SDK to run over stdio.
+# Uses the MCP SDK for stdio-based AI tool serving.
 try:
     from mcp.server import Server
     from mcp.server.stdio import stdio_server
@@ -24,7 +25,7 @@ except ImportError:
 # The path to our optimized scanner script
 TP_SCRIPT_PATH = Path(__file__).parent / "tp.py"
 
-server = Server("codex-auth-scanner")
+server = Server("codex-auth-sweep-skill")
 
 @server.list_tools()
 async def handle_list_tools() -> list[Tool]:
@@ -139,7 +140,7 @@ async def handle_call_tool(name: str, arguments: dict) -> list[TextContent]:
 
 
 async def main():
-    # Run the standard stdio server loop bridging the official Python SDK
+    # Run the skill server loop using MCP stdio transport
     async with stdio_server() as (read_stream, write_stream):
         await server.run(
             read_stream,
@@ -148,7 +149,7 @@ async def main():
         )
 
 def main_sync():
-    """Synchronous entry point for package console scripts (e.g., pipx/uv)."""
+    """Synchronous entry point for package console scripts."""
     asyncio.run(main())
 
 if __name__ == "__main__":

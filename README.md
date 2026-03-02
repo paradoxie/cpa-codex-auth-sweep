@@ -45,7 +45,7 @@ pip install aiohttp
 
 Done! ✅ Now tell your AI "sweep accounts" or "clean dead tokens" and it just works.
 
-> **Tip:** Also includes `mcp_tp.py` for standalone MCP server use (`pip install mcp && python3 mcp_tp.py`).
+> **Tip:** Also includes `cpa-codex-auth-sweep-skill.py` for standalone skill server use (`pip install mcp && python3 cpa-codex-auth-sweep-skill.py`).
 
 ### CLI Usage
 
@@ -120,7 +120,7 @@ pip install aiohttp
 
 搞定！✅ 跟 AI 说「扫号」「清死号」「扫描凭证」就能自动执行。
 
-> **提示：** 同时包含 `mcp_tp.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 mcp_tp.py`）。
+> **提示：** 同时包含 `cpa-codex-auth-sweep-skill.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 mcp_tp.py`）。
 
 ### CLI 使用方式
 
