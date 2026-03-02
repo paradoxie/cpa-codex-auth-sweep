@@ -14,8 +14,8 @@ A high-performance, fully async (asyncio + aiohttp) credential scanner for local
 - **Smart Detection** — Auto-identifies Codex auth files and sends real API probe requests
 - **Precise Classification** — Distinguishes 401 (expired), quota-exceeded, unlimited, and healthy credentials
 - **One-Click Cleanup** — `--delete-401` to batch-remove expired credentials
-- **MCP Server** — Ships with an MCP (Model Context Protocol) wrapper for direct AI model integration
-- **AI-Native** — Once installed as a Skill, your AI assistant auto-recognizes intents like "sweep accounts" or "clean dead tokens"
+- **AI Agent Skill** — Install as a Skill, your AI assistant auto-recognizes intents like "sweep accounts" or "clean dead tokens" and executes
+- **MCP Compatible** — Also ships with an MCP (Model Context Protocol) wrapper for standalone server use
 
 ### Prerequisites
 
@@ -36,15 +36,11 @@ python3 tp.py --no-quarantine --delete-401 --yes
 python3 tp.py --output-json --no-quarantine
 ```
 
-### MCP Server
+### Install as AI Agent Skill
 
-```bash
-# Install MCP dependency
-pip install mcp
+Copy the entire project folder into your AI agent's skill directory (e.g. `~/.gemini/antigravity/skills/cpa-codex-auth-sweep/`), and create a `SKILL.md` following the included template. Once installed, your AI automatically triggers the scan when it detects intents like "sweep accounts" or "clean dead tokens".
 
-# Run the MCP server
-python3 mcp_tp.py
-```
+> **Tip:** The project also includes `mcp_tp.py` for standalone MCP server usage (`pip install mcp && python3 mcp_tp.py`).
 
 ### Cleanup Rules
 
@@ -73,8 +69,8 @@ Only credentials with **definitive failure** will be cleaned. Transient errors a
 - **智能探测** — 自动识别 Codex 认证文件，发起真实 API 探活请求
 - **精确分类** — 区分 401（失效）、配额超限、无限额、正常存活等状态
 - **一键清理** — 支持 `--delete-401` 批量删除失效凭证
-- **MCP 服务器** — 内置 MCP（Model Context Protocol）封装，可直接供 AI 模型调用
-- **AI 原生集成** — 作为 Skill 安装后，AI 自动识别「扫号」「清死号」等意图并执行
+- **AI Agent Skill** — 安装为技能后，AI 自动识别「扫号」「清死号」等意图并执行
+- **MCP 兼容** — 同时附带 MCP（Model Context Protocol）封装，支持独立服务器模式
 
 ### 前置依赖
 
@@ -95,15 +91,11 @@ python3 tp.py --no-quarantine --delete-401 --yes
 python3 tp.py --output-json --no-quarantine
 ```
 
-### MCP 服务器
+### 安装为 AI Agent Skill
 
-```bash
-# 安装 MCP 依赖
-pip install mcp
+将整个项目文件夹复制到你的 AI 代理技能目录（例如 `~/.gemini/antigravity/skills/cpa-codex-auth-sweep/`），并按照附带的模板创建 `SKILL.md`。安装后，AI 检测到「扫号」「清死号」等意图时会自动触发扫描。
 
-# 启动 MCP 服务器
-python3 mcp_tp.py
-```
+> **提示：** 项目同时包含 `mcp_tp.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 mcp_tp.py`）。
 
 ### 清理规则
 
