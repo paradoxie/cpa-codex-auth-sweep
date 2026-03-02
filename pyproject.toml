@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codex-auth-scanner-mcp"
+version = "1.0.0"
+description = "A high-performance async Codex Auth Scanner exposed as an MCP server"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  {name = "paradoxie"}
+]
+dependencies = [
+    "aiohttp>=3.9.0",
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+codex-scanner-mcp = "mcp_tp:main_sync"
+codex-scanner = "tp:main"
+
+[tool.setuptools]
+py-modules = ["tp", "mcp_tp"]
