@@ -17,13 +17,26 @@ A high-performance, fully async (asyncio + aiohttp) credential scanner for local
 - **AI Agent Skill** — Install as a Skill, your AI assistant auto-recognizes intents like "sweep accounts" or "clean dead tokens" and executes
 - **MCP Compatible** — Also ships with an MCP (Model Context Protocol) wrapper for standalone server use
 
-### Prerequisites
+### 🚀 Install as AI Agent Skill
+
+Just two steps — clone and install the dependency:
 
 ```bash
+# Step 1: Clone directly into your agent's skill directory
+git clone https://github.com/paradoxie/cpa-codex-auth-sweep.git \
+  ~/.gemini/antigravity/skills/cpa-codex-auth-sweep
+
+# Step 2: Install Python dependency
 pip install aiohttp
 ```
 
+That's it! ✅ Next time you tell your AI "sweep accounts" or "clean dead tokens", it will automatically run the scan.
+
+> **Tip:** The project also includes `mcp_tp.py` for standalone MCP server use (`pip install mcp && python3 mcp_tp.py`).
+
 ### CLI Usage
+
+You can also use it directly from the command line:
 
 ```bash
 # Scan only (read-only, no side effects)
@@ -35,12 +48,6 @@ python3 tp.py --no-quarantine --delete-401 --yes
 # Output as JSON (for programmatic use)
 python3 tp.py --output-json --no-quarantine
 ```
-
-### Install as AI Agent Skill
-
-Copy the entire project folder into your AI agent's skill directory (e.g. `~/.gemini/antigravity/skills/cpa-codex-auth-sweep/`), and create a `SKILL.md` following the included template. Once installed, your AI automatically triggers the scan when it detects intents like "sweep accounts" or "clean dead tokens".
-
-> **Tip:** The project also includes `mcp_tp.py` for standalone MCP server usage (`pip install mcp && python3 mcp_tp.py`).
 
 ### Cleanup Rules
 
@@ -72,13 +79,26 @@ Only credentials with **definitive failure** will be cleaned. Transient errors a
 - **AI Agent Skill** — 安装为技能后，AI 自动识别「扫号」「清死号」等意图并执行
 - **MCP 兼容** — 同时附带 MCP（Model Context Protocol）封装，支持独立服务器模式
 
-### 前置依赖
+### 🚀 安装为 AI Agent Skill
+
+只需两步 —— 克隆 + 装依赖：
 
 ```bash
+# 第一步：直接克隆到技能目录
+git clone https://github.com/paradoxie/cpa-codex-auth-sweep.git \
+  ~/.gemini/antigravity/skills/cpa-codex-auth-sweep
+
+# 第二步：安装 Python 依赖
 pip install aiohttp
 ```
 
+搞定！✅ 之后跟 AI 说「扫号」「清死号」「扫描凭证」，它就会自动执行扫描。
+
+> **提示：** 项目同时包含 `mcp_tp.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 mcp_tp.py`）。
+
 ### CLI 使用方式
+
+也可以直接在命令行使用：
 
 ```bash
 # 常规扫描（只看不删）
@@ -90,12 +110,6 @@ python3 tp.py --no-quarantine --delete-401 --yes
 # 输出纯 JSON（供程序调用）
 python3 tp.py --output-json --no-quarantine
 ```
-
-### 安装为 AI Agent Skill
-
-将整个项目文件夹复制到你的 AI 代理技能目录（例如 `~/.gemini/antigravity/skills/cpa-codex-auth-sweep/`），并按照附带的模板创建 `SKILL.md`。安装后，AI 检测到「扫号」「清死号」等意图时会自动触发扫描。
-
-> **提示：** 项目同时包含 `mcp_tp.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 mcp_tp.py`）。
 
 ### 清理规则
 
