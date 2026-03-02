@@ -53,13 +53,13 @@ You can also use it directly from the command line:
 
 ```bash
 # Scan only (read-only, no side effects)
-python3 tp.py --no-quarantine
+python3 scanner.py --no-quarantine
 
 # Scan + delete all 401 expired credentials
-python3 tp.py --no-quarantine --delete-401 --yes
+python3 scanner.py --no-quarantine --delete-401 --yes
 
 # Output as JSON (for programmatic use)
-python3 tp.py --output-json --no-quarantine
+python3 scanner.py --output-json --no-quarantine
 ```
 
 ### Cleanup Rules
@@ -120,7 +120,7 @@ pip install aiohttp
 
 搞定！✅ 跟 AI 说「扫号」「清死号」「扫描凭证」就能自动执行。
 
-> **提示：** 同时包含 `cpa-codex-auth-sweep-skill.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 mcp_tp.py`）。
+> **提示：** 同时包含 `cpa-codex-auth-sweep-skill.py`，可作为独立 MCP 服务器使用（`pip install mcp && python3 cpa-codex-auth-sweep-skill.py`）。
 
 ### CLI 使用方式
 
@@ -128,13 +128,13 @@ pip install aiohttp
 
 ```bash
 # 常规扫描（只看不删）
-python3 tp.py --no-quarantine
+python3 scanner.py --no-quarantine
 
 # 扫描 + 一键删除 401 死号
-python3 tp.py --no-quarantine --delete-401 --yes
+python3 scanner.py --no-quarantine --delete-401 --yes
 
 # 输出纯 JSON（供程序调用）
-python3 tp.py --output-json --no-quarantine
+python3 scanner.py --output-json --no-quarantine
 ```
 
 ### 清理规则

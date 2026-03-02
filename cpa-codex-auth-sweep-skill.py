@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AI Agent Skill Server for Codex Auth Scanner (tp.py).
+AI Agent Skill Server for Codex Auth Scanner (scanner.py).
 This server exposes a tool that allows AI models to directly discover, analyze,
 and optionally delete Codex authentication files.
 Uses the MCP (Model Context Protocol) SDK internally for stdio transport.
@@ -23,7 +23,7 @@ except ImportError:
 
 
 # The path to our optimized scanner script
-TP_SCRIPT_PATH = Path(__file__).parent / "tp.py"
+TP_SCRIPT_PATH = Path(__file__).parent / "scanner.py"
 
 server = Server("codex-auth-sweep-skill")
 
@@ -83,7 +83,7 @@ async def handle_call_tool(name: str, arguments: dict) -> list[TextContent]:
     if delete_401:
         cmd.extend(["--delete-401", "--yes"])
 
-    # Launch tp.py in an isolated headless process to avoid stdio corruption
+    # Launch scanner.py in an isolated headless process to avoid stdio corruption
     process = await asyncio.create_subprocess_exec(
         *cmd,
         stdout=asyncio.subprocess.PIPE,

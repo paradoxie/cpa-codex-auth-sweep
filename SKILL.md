@@ -17,13 +17,13 @@ pip install aiohttp
 
 ```bash
 # 常规扫描（只看不删）
-python3 <SKILL目录>/tp.py --no-quarantine
+python3 <SKILL目录>/scanner.py --no-quarantine
 
 # 扫描 + 删除 401 死号
-python3 <SKILL目录>/tp.py --no-quarantine --delete-401 --yes
+python3 <SKILL目录>/scanner.py --no-quarantine --delete-401 --yes
 
 # JSON 机读模式
-python3 <SKILL目录>/tp.py --output-json --no-quarantine
+python3 <SKILL目录>/scanner.py --output-json --no-quarantine
 ```
 
 ## 清理规则
