@@ -62,6 +62,32 @@ python3 scanner.py --no-quarantine --delete-401 --yes
 python3 scanner.py --output-json --no-quarantine
 ```
 
+### 🖥️ Server Deployment
+
+If you have [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) deployed on a remote server (e.g. Ubuntu VPS), you can use this tool directly on the server to scan and clean credentials:
+
+```bash
+# 1. Clone the repo on your server
+ssh your-server
+cd ~
+git clone https://github.com/paradoxie/cpa-codex-auth-sweep.git
+
+# 2. Install dependency
+pip3 install aiohttp
+
+# 3. Run the scanner
+cd ~/cpa-codex-auth-sweep
+python3 scanner.py --no-quarantine
+```
+
+The scanner automatically reads credentials from `~/.cli-proxy-api` — the default `auth-dir` used by CLIProxyAPI.
+
+> **Tip:** You can set up a cron job for periodic cleanup:
+> ```bash
+> # Run every 6 hours, auto-delete expired credentials
+> 0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes >> /tmp/codex-sweep.log 2>&1
+> ```
+
 ### Cleanup Rules
 
 Only credentials with **definitive failure** will be cleaned. Transient errors are always preserved.
@@ -136,6 +162,32 @@ python3 scanner.py --no-quarantine --delete-401 --yes
 # 输出纯 JSON（供程序调用）
 python3 scanner.py --output-json --no-quarantine
 ```
+
+### 🖥️ 服务器部署
+
+如果你在远程服务器（如 Ubuntu VPS）上部署了 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI)，可以直接在服务器上使用本工具扫描和清理凭证：
+
+```bash
+# 1. 在服务器上拉取项目
+ssh your-server
+cd ~
+git clone https://github.com/paradoxie/cpa-codex-auth-sweep.git
+
+# 2. 安装依赖
+pip3 install aiohttp
+
+# 3. 运行扫描
+cd ~/cpa-codex-auth-sweep
+python3 scanner.py --no-quarantine
+```
+
+扫描器会自动读取 `~/.cli-proxy-api` 目录下的凭证文件——这是 CLIProxyAPI 默认的 `auth-dir` 路径。
+
+> **提示：** 可以配合 cron 定时任务实现自动清理：
+> ```bash
+> # 每 6 小时执行一次，自动删除失效凭证
+> 0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes >> /tmp/codex-sweep.log 2>&1
+> ```
 
 ### 清理规则
 
