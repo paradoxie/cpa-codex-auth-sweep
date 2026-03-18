@@ -82,11 +82,61 @@ python3 scanner.py --no-quarantine
 
 The scanner automatically reads credentials from `~/.cli-proxy-api` — the default `auth-dir` used by CLIProxyAPI.
 
-> **Tip:** You can set up a cron job for periodic cleanup:
-> ```bash
-> # Run every 6 hours, auto-delete expired credentials
-> 0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes >> /tmp/codex-sweep.log 2>&1
-> ```
+> **Note:** If CLIProxyAPI runs under a non-root user (e.g. `ubuntu`), you must specify the full path: `--auth-dir /home/ubuntu/.cli-proxy-api`
+
+### ⏰ Automated Scheduled Scanning (Cron)
+
+Set up a cron job to automatically scan and purge expired credentials on a regular schedule.
+
+**Step 1: Open the crontab editor**
+
+```bash
+crontab -e
+# First time? Select 1 (nano) as the editor
+```
+
+**Step 2: Add one of the following lines at the end of the file**
+
+```bash
+# Every 12 hours (recommended — balanced between freshness and safety)
+0 */12 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes --auth-dir /home/ubuntu/.cli-proxy-api >> /tmp/codex-sweep.log 2>&1
+
+# Every 6 hours (more aggressive)
+0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes --auth-dir /home/ubuntu/.cli-proxy-api >> /tmp/codex-sweep.log 2>&1
+
+# Once daily at 3:00 AM (most conservative)
+0 3 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes --auth-dir /home/ubuntu/.cli-proxy-api >> /tmp/codex-sweep.log 2>&1
+```
+
+> ⚠️ **Important:** Adjust `--auth-dir` to match your actual CLIProxyAPI auth directory path.
+
+**Step 3: Save and exit** (nano: `Ctrl+X` → `Y` → `Enter`)
+
+**Step 4: Verify the cron job**
+
+```bash
+crontab -l
+```
+
+**Checking logs:**
+
+```bash
+# View the latest scan log
+cat /tmp/codex-sweep.log
+
+# Or follow the log in real-time
+tail -f /tmp/codex-sweep.log
+```
+
+#### Frequency Recommendations
+
+| Frequency | Cron Expression | Best For |
+|-----------|----------------|----------|
+| Every 12 hours | `0 */12 * * *` | ✅ Recommended — good balance |
+| Every 6 hours | `0 */6 * * *` | High-volume credential environments |
+| Once daily | `0 3 * * *` | Conservative / few credentials |
+
+> **Note:** After the first cleanup, scan volume drops significantly — only surviving credentials are probed. For example, 72 credentials → 67 deleted 401s → only 5 probed per scan.
 
 ### 🔧 Troubleshooting
 
@@ -247,11 +297,61 @@ python3 scanner.py --no-quarantine
 
 扫描器会自动读取 `~/.cli-proxy-api` 目录下的凭证文件——这是 CLIProxyAPI 默认的 `auth-dir` 路径。
 
-> **提示：** 可以配合 cron 定时任务实现自动清理：
-> ```bash
-> # 每 6 小时执行一次，自动删除失效凭证
-> 0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes >> /tmp/codex-sweep.log 2>&1
-> ```
+> **注意：** 如果 CLIProxyAPI 以非 root 用户运行（如 `ubuntu`），需指定完整路径：`--auth-dir /home/ubuntu/.cli-proxy-api`
+
+### ⏰ 定时自动扫号（Cron 配置）
+
+配置 cron 定时任务，自动扫描并清理失效凭证。
+
+**第一步：打开 crontab 编辑器**
+
+```bash
+crontab -e
+# 第一次使用会让你选编辑器，选 1（nano）最简单
+```
+
+**第二步：在文件末尾添加以下任一行**
+
+```bash
+# 每 12 小时执行一次（推荐 — 兼顾时效性和安全性）
+0 */12 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes --auth-dir /home/ubuntu/.cli-proxy-api >> /tmp/codex-sweep.log 2>&1
+
+# 每 6 小时执行一次（更积极）
+0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes --auth-dir /home/ubuntu/.cli-proxy-api >> /tmp/codex-sweep.log 2>&1
+
+# 每天凌晨 3 点执行一次（最保守）
+0 3 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes --auth-dir /home/ubuntu/.cli-proxy-api >> /tmp/codex-sweep.log 2>&1
+```
+
+> ⚠️ **注意：** 请根据你实际的 CLIProxyAPI 认证目录路径调整 `--auth-dir` 参数。
+
+**第三步：保存退出**（nano：`Ctrl+X` → `Y` → `Enter`）
+
+**第四步：确认定时任务已生效**
+
+```bash
+crontab -l
+```
+
+**查看扫描日志：**
+
+```bash
+# 查看最新日志
+cat /tmp/codex-sweep.log
+
+# 实时跟踪日志
+tail -f /tmp/codex-sweep.log
+```
+
+#### 扫描频率建议
+
+| 频率 | Cron 表达式 | 适用场景 |
+|------|------------|----------|
+| 每 12 小时 | `0 */12 * * *` | ✅ 推荐 — 平衡时效与安全 |
+| 每 6 小时 | `0 */6 * * *` | 凭证数量多、变动频繁 |
+| 每天一次 | `0 3 * * *` | 保守策略 / 凭证较少 |
+
+> **说明：** 首次清理后，扫描量会大幅下降——只有存活的凭证会被探测。例如：72 个凭证 → 删除 67 个 401 → 之后每次只探测 5 个。
 
 ### 🔧 常见问题排查
 
