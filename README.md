@@ -88,6 +88,70 @@ The scanner automatically reads credentials from `~/.cli-proxy-api` — the defa
 > 0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes >> /tmp/codex-sweep.log 2>&1
 > ```
 
+### 🔧 Troubleshooting
+
+<details>
+<summary><b>1. <code>pip3: command not found</code></b></summary>
+
+On Ubuntu 20.04 and some minimal server images, `pip3` is not pre-installed.
+
+```bash
+sudo apt update && sudo apt install python3-pip -y
+pip3 install aiohttp
+```
+
+</details>
+
+<details>
+<summary><b>2. <code>Error: auth directory not found: /root/.cli-proxy-api</code></b></summary>
+
+The scanner defaults to `~/.cli-proxy-api`. If CLIProxyAPI runs under a different user (e.g. `ubuntu`), `~` expands to that user's home, not `/root/`.
+
+**Solution:** Specify the correct path with `--auth-dir`:
+
+```bash
+# Check your CLIProxyAPI config to find the actual auth-dir
+cat /home/ubuntu/cliproxyapi/config.yaml | grep auth-dir
+
+# Then specify the full path
+python3 scanner.py --no-quarantine --auth-dir /home/ubuntu/.cli-proxy-api
+```
+
+**How to find it if you forgot:**
+
+```bash
+# Find the running CLIProxyAPI process
+ps aux | grep cli-proxy
+
+# Find config files
+find / -name "config.yaml" -path "*cli*" 2>/dev/null
+```
+
+</details>
+
+<details>
+<summary><b>3. <code>module 'asyncio' has no attribute 'to_thread'</code></b></summary>
+
+`asyncio.to_thread()` requires **Python 3.9+**. Ubuntu 20.04 ships with Python 3.8.
+
+This has been fixed in the latest version — the code now uses `loop.run_in_executor()` which is compatible with Python 3.8+.
+
+```bash
+# Update to the latest version
+cd ~/cpa-codex-auth-sweep
+git pull origin main
+```
+
+If you are stuck on an older version, you can also manually replace line 545 in `scanner.py`:
+
+```diff
+- payload = await asyncio.to_thread(_load_json, path)
++ loop = asyncio.get_event_loop()
++ payload = await loop.run_in_executor(None, _load_json, path)
+```
+
+</details>
+
 ### Cleanup Rules
 
 Only credentials with **definitive failure** will be cleaned. Transient errors are always preserved.
@@ -188,6 +252,70 @@ python3 scanner.py --no-quarantine
 > # 每 6 小时执行一次，自动删除失效凭证
 > 0 */6 * * * cd ~/cpa-codex-auth-sweep && python3 scanner.py --no-quarantine --delete-401 --yes >> /tmp/codex-sweep.log 2>&1
 > ```
+
+### 🔧 常见问题排查
+
+<details>
+<summary><b>1. <code>pip3: command not found</code>（找不到 pip3 命令）</b></summary>
+
+Ubuntu 20.04 等精简系统镜像默认未安装 `pip3`。
+
+```bash
+sudo apt update && sudo apt install python3-pip -y
+pip3 install aiohttp
+```
+
+</details>
+
+<details>
+<summary><b>2. <code>Error: auth directory not found: /root/.cli-proxy-api</code>（找不到认证目录）</b></summary>
+
+扫描器默认读取 `~/.cli-proxy-api`。如果 CLIProxyAPI 是以其他用户运行的（比如 `ubuntu`），`~` 会展开为该用户的 home 目录，而不是 `/root/`。
+
+**解决方案：** 用 `--auth-dir` 指定正确的路径：
+
+```bash
+# 查看 CLIProxyAPI 配置中实际的 auth-dir 路径
+cat /home/ubuntu/cliproxyapi/config.yaml | grep auth-dir
+
+# 指定完整路径运行
+python3 scanner.py --no-quarantine --auth-dir /home/ubuntu/.cli-proxy-api
+```
+
+**忘记路径了？用以下命令查找：**
+
+```bash
+# 查找运行中的 CLIProxyAPI 进程
+ps aux | grep cli-proxy
+
+# 查找配置文件
+find / -name "config.yaml" -path "*cli*" 2>/dev/null
+```
+
+</details>
+
+<details>
+<summary><b>3. <code>module 'asyncio' has no attribute 'to_thread'</code>（Python 版本不兼容）</b></summary>
+
+`asyncio.to_thread()` 需要 **Python 3.9+**，而 Ubuntu 20.04 自带的是 Python 3.8。
+
+此问题已在最新版本中修复——代码已改用兼容 Python 3.8+ 的 `loop.run_in_executor()`。
+
+```bash
+# 更新到最新版本即可
+cd ~/cpa-codex-auth-sweep
+git pull origin main
+```
+
+如果使用旧版本，也可以手动修改 `scanner.py` 第 545 行：
+
+```diff
+- payload = await asyncio.to_thread(_load_json, path)
++ loop = asyncio.get_event_loop()
++ payload = await loop.run_in_executor(None, _load_json, path)
+```
+
+</details>
 
 ### 清理规则
 
