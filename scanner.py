@@ -542,7 +542,8 @@ async def _scan_single_file(
     session: aiohttp.ClientSession, path: Path, args: argparse.Namespace, probe_body: bytes
 ) -> list[CheckResult]:
     try:
-        payload = await asyncio.to_thread(_load_json, path)
+        loop = asyncio.get_event_loop()
+        payload = await loop.run_in_executor(None, _load_json, path)
     except Exception as exc:  # noqa: BLE001
         return [CheckResult.make_error(str(path), f"parse error: {exc}")]
 
